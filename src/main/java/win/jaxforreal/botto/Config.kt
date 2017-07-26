@@ -6,7 +6,7 @@ import java.io.FileWriter
 import java.util.*
 
 object Config : Properties(DefaultProperties) {
-    val userPropFile = File(File(javaClass.protectionDomain.codeSource.location.toURI()), "config.properties")
+    private val userPropFile = File(File(javaClass.protectionDomain.codeSource.location.toURI()), "config.properties")
 
     init {
         if (userPropFile.isFile) {
