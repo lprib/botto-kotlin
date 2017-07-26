@@ -4,6 +4,7 @@ import win.jaxforreal.botto.Config
 import win.jaxforreal.botto.Event
 
 class ConsoleFrontend : Frontend {
+    override val name: String = "console"
     override val onMessage = Event<MessageEventData>()
     val messageInputThread = Thread {
         while (true) {

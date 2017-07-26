@@ -12,6 +12,7 @@ import java.net.URI
 import javax.net.ssl.SSLContext
 
 open class HackChatFrontend(username: String, pass: String, channel: String) : Frontend {
+    override val name = "hackchat"
     override val onMessage = Event<MessageEventData>()
     private val parser = JSONParser()
 
