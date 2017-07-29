@@ -30,7 +30,7 @@ class Command(
 
     companion object {
         fun getFirstWord(input: String): Pair<String, String> {
-            val first = input.split(Regex.fromLiteral(" "))[0]
+            val first = input.split(" ")[0]
             val rest = if (input.length > first.length + 1) input.substring(first.length + 1) else ""
             return Pair(first, rest)
         }

@@ -10,7 +10,11 @@ class ConsoleFrontend : Frontend {
         while (true) {
             val message = readLine()
             if (message != null) {
-                onMessage(MessageEventData(User(Config["console.username"], Config["console.trip"]), message, this))
+                onMessage(MessageEventData(
+                        User(
+                                Config["console", "username"],
+                                Config["console", "trip"])
+                        , message, this))
             }
         }
     }

@@ -1,31 +1,84 @@
 package win.jaxforreal.botto
 
+import com.moandjiezana.toml.Toml
+import com.moandjiezana.toml.TomlWriter
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
-import java.util.*
 
-object Config : Properties(DefaultProperties) {
-    private val userPropFile = File(File(javaClass.protectionDomain.codeSource.location.toURI()), "config.properties")
+//TODO arbitrarily nested gets and sets
+//ie set(vararg path: String, value: Any)
+//get(vararg path: String): Any
 
+object Config {
     init {
-        if (userPropFile.isFile) {
-            load(FileReader(userPropFile))
+        println()
+    }
+
+    private val userPropFile = File(File(javaClass.protectionDomain.codeSource.location.toURI()), "userConfig.txt")
+    private val propsToml = Toml().read(FileReader(javaClass.classLoader.getResource("defaults.txt").file))
+
+    //load user config file into props if it exists
+    val props = if (userPropFile.isFile) {
+        propsToml.read(FileReader(userPropFile)).toMap()
+    } else {
+        propsToml.toMap()
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getMaybe(vararg keys: String): T? {
+        var nextMap = props
+
+        for (key in keys.dropLast(1)) {
+            nextMap = nextMap[key] as MutableMap<String, Any>
         }
+
+        return nextMap[keys.last()] as T
     }
 
-    operator fun get(name: String): String = getProperty(name)
+    /**
+     * gets the value of type T at the path defined by keys
+     *
+     * eg. Config.get<String>("console", "username") would return "qwerty" with the following TOML:
+     *
+     * [ config]
+     * username = "qwerty"
+     */
+    operator fun get(vararg keys: String): String = getMaybe<String>(*keys)!!
 
-    operator fun set(name: String, value: String) = setProperty(name, value)
+    /**
+     * generic version of the default get
+     */
+    operator fun <T> get(vararg keys: String): T = getMaybe<T>(*keys)!!
 
+    /**
+     * Config["irc", "username"] = value
+     */
+    @Suppress("UNCHECKED_CAST")
+    operator fun set(vararg keys: String, value: Any) {
+        var nextMap = props
+        for (key in keys.dropLast(1)) {
+            nextMap = if (nextMap.containsKey(key)) {
+                //return the inner map if it exists
+                nextMap[key] as MutableMap<String, Any>
+            } else {
+                //if the inner map doesn't exist, create and return it
+                nextMap[key] = mutableMapOf<String, Any>()
+                nextMap[key] as MutableMap<String, Any>
+            }
+        }
+
+        nextMap[keys.last()] = value
+    }
+
+    /**
+     * Save properties to the user file "userConfig.txt",
+     * located in the same directory as this JAR/classpath.
+     */
     fun save() {
-        store(FileWriter(userPropFile), null)
-    }
-}
-
-private object DefaultProperties : Properties() {
-    init {
-        val stream = javaClass.classLoader.getResourceAsStream("defaultConfig.properties")
-        load(stream)
+        val writer = FileWriter(userPropFile, false)
+        println(userPropFile)
+        TomlWriter().write(props, writer)
+        writer.close()
     }
 }

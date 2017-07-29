@@ -16,11 +16,11 @@ open class HackChatFrontend(username: String, pass: String, channel: String) : F
     override val onMessage = Event<MessageEventData>()
     private val parser = JSONParser()
 
-    val ws = object : WebSocketClient(URI(Config["hackchat.url"])) {
+    val ws = object : WebSocketClient(URI(Config["hackchat", "url"])) {
 
         init {
             val context = SSLContext.getInstance("TLS")
-            context.init(null, null, null) //null, null, null is the default ssl context
+            context.init(null, null, null) //null, null, null is the defaultProps ssl context
             socket = context.socketFactory.createSocket()
         }
 

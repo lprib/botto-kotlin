@@ -15,7 +15,7 @@ object Commands {
                 if (args.bot.broadcastTo(frontendName, text)) {
                     println("broadcasting to $frontendName: `$text`")
                 } else {
-                    args.replyMessage("no frontend \"$frontendName\" found")
+                    args.replyMessage("no frontend '$frontendName' found")
                 }
             }
                     .sub(Command("all") { (argText, _, bot) ->
@@ -30,16 +30,18 @@ object Commands {
 
             Command("config")
                     .sub(Command("set") { args ->
-                        val (name, value) = Command.getFirstWord(args.argText)
-                        Config[name] = value
-                        args.replyMessage("set $name = $value")
+                        val (path, value) = Command.getFirstWord(args.argText)
+                        val pathSplit = path.split(".").toTypedArray()
+                        Config.set(keys = *pathSplit, value = value)
+                        args.replyMessage("Set $path = $value")
                     })
                     .sub(Command("get") { args ->
-                        args.replyMessage("property ${args.argText} = ${Config[args.argText]}")
+                        val pathSplit = args.argText.split(".").toTypedArray()
+                        args.replyMessage("${args.argText} = ${Config.getMaybe<Any>(*pathSplit)}")
                     })
                     .sub(Command("save") { args ->
                         Config.save()
-                        args.replyMessage("saved config file")
+                        args.replyMessage("Config saved.")
                     })
     )
 }

@@ -1,0 +1,11 @@
+trigger = "."
+
+[toastychat]
+url = "secret-ip-here"
+
+[hackchat]
+url = "wss://hack.chat/chat-ws"
+
+[console]
+username = "console"
+trip = "consoletrip"

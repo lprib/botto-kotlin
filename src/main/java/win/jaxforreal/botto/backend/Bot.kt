@@ -14,7 +14,7 @@ class Bot {
     }
 
     private fun onMessage(messageData: MessageEventData) {
-        if (messageData.text.startsWith(Config["trigger"])) {
+        if (messageData.text.startsWith(Config["trigger"] as String)) {
             val withoutPrefix = messageData.text.substring(1)
             Commands.commands.first { it.test(withoutPrefix, messageData, this) }
         }
