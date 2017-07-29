@@ -27,6 +27,7 @@ object Config {
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getMaybe(vararg keys: String): T? {
+        println("getting ${keys.joinToString(".")}")
         var nextMap = props
 
         for (key in keys.dropLast(1)) {

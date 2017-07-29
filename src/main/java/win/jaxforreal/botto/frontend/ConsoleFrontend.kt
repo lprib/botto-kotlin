@@ -13,7 +13,7 @@ class ConsoleFrontend : Frontend {
                 onMessage(MessageEventData(
                         User(
                                 Config["console", "username"],
-                                Config["console", "trip"])
+                                Config["console", "trip"], this)
                         , message, this))
             }
         }

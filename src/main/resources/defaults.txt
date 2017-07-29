@@ -9,3 +9,19 @@ url = "wss://hack.chat/chat-ws"
 [console]
 username = "console"
 trip = "consoletrip"
+
+[privilege]
+    [[privilege.ADMIN]]
+        name = "liam"
+        trip = "qwerty"
+        frontend = "hackchat"
+
+    [[privilege.ADMIN]]
+        name = "console"
+        trip = "consoletrip"
+        frontend = "console"
+
+    [[privilege.MODERATOR]]
+        name = "mod"
+        trip = "123"
+        frontend = "toastychat"

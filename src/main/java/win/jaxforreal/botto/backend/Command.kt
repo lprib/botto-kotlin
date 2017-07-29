@@ -4,12 +4,16 @@ import win.jaxforreal.botto.frontend.MessageEventData
 
 class Command(
         val name: String,
-        val onSuccess: (CommandEventArgs) -> Unit = {}
+        val privilege: Privilege = Privilege.USER,
+        val helpText: String = "no help",
+        val onSuccess: CommandEventArgs.() -> Unit = {}
 ) {
     private val subCommands = arrayListOf<Command>()
 
-    fun sub(cmd: Command): Command {
-        subCommands.add(cmd)
+    fun help(text: String) = Command(name, privilege, text, onSuccess)
+
+    fun sub(sub: Command): Command {
+        subCommands.add(sub)
         return this
     }
 
@@ -22,7 +26,14 @@ class Command(
         if (name == firstWord) {
             //test all subCommands, and stop when a single one matches
             if (!subCommands.any { it.test(restOfString, data, bot) }) {
-                onSuccess(CommandEventArgs(restOfString, data, bot))
+                val commandEventArgs = CommandEventArgs(restOfString, data, bot)
+
+                //if none match, and privilege levels are OK, the parent command is triggered
+                if (data.user.getPrivilegeLevel().isAtOrAbove(privilege)) {
+                    onSuccess(commandEventArgs)
+                } else {
+                    commandEventArgs.replyMessage("You must have privilege level $privilege to do that :)")
+                }
             }
             return true
         } else return false

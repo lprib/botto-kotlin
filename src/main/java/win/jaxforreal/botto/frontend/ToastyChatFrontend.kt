@@ -1,7 +1,5 @@
 package win.jaxforreal.botto.frontend
 
-import win.jaxforreal.botto.frontend.HackChatFrontend
-
 class ToastyChatFrontend(username: String, pass: String, channel: String) : HackChatFrontend(username, pass, channel) {
     override val name = "toastychat"
     //    override val ws = object : WebSocketClient(URI(Config["toastychat.ip"])) {

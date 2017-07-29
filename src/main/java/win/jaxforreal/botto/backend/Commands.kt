@@ -1,47 +1,52 @@
 package win.jaxforreal.botto.backend
 
 import win.jaxforreal.botto.Config
+import win.jaxforreal.botto.backend.Privilege.*
 
 object Commands {
     val commands = arrayOf(
 
-            Command("source") { args ->
-                args.messageData.frontend.sendMessage("no source for you, @${args.messageData.user.name}")
+            Command("source") {
+                messageData.frontend.sendMessage("no source for you, @${messageData.user.name}")
             },
 
 
-            Command("broadcast") { args ->
-                val (frontendName, text) = Command.getFirstWord(args.argText)
-                if (args.bot.broadcastTo(frontendName, text)) {
+            Command("broadcast", MODERATOR) {
+                val (frontendName, text) = Command.getFirstWord(argText)
+                if (bot.broadcastTo(frontendName, text)) {
                     println("broadcasting to $frontendName: `$text`")
                 } else {
-                    args.replyMessage("no frontend '$frontendName' found")
+                    replyMessage("no frontend '$frontendName' found")
                 }
             }
-                    .sub(Command("all") { (argText, _, bot) ->
+                    .help("")
+
+                    .sub(Command("all", MODERATOR) {
                         println("broadcasting all")
                         bot.broadcastAll(argText)
                     })
-                    .sub(Command("list") { args ->
-                        val list = args.bot.frontends.map { it.name }.joinToString()
-                        args.replyMessage("Available frontends: $list.")
+                    .sub(Command("list", MODERATOR) {
+                        val list = bot.frontends.map { it.name }.joinToString()
+                        replyMessage("Available frontends: $list.")
                     }),
 
 
-            Command("config")
-                    .sub(Command("set") { args ->
-                        val (path, value) = Command.getFirstWord(args.argText)
+            Command("config", ADMIN)
+                    .sub(Command("set", ADMIN) {
+                        val (path, value) = Command.getFirstWord(argText)
                         val pathSplit = path.split(".").toTypedArray()
                         Config.set(keys = *pathSplit, value = value)
-                        args.replyMessage("Set $path = $value")
+                        replyMessage("Set $path = $value")
                     })
-                    .sub(Command("get") { args ->
-                        val pathSplit = args.argText.split(".").toTypedArray()
-                        args.replyMessage("${args.argText} = ${Config.getMaybe<Any>(*pathSplit)}")
+                    .sub(Command("get", ADMIN) {
+                        val pathSplit = argText.split(".").toTypedArray()
+                        replyMessage("${argText} = ${Config.getMaybe<Any>(*pathSplit)}")
                     })
-                    .sub(Command("save") { args ->
+                    .sub(Command("save", ADMIN) {
                         Config.save()
-                        args.replyMessage("Config saved.")
-                    })
+                        replyMessage("Config saved.")
+                    }),
+            //TODO
+            Command("privilege", ADMIN)
     )
 }
