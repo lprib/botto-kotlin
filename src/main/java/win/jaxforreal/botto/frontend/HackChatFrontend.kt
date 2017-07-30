@@ -13,7 +13,11 @@ import javax.net.ssl.SSLContext
 
 open class HackChatFrontend(username: String, pass: String, channel: String) : Frontend {
     override val name = "hackchat"
+
     override val onMessage = Event<MessageEventData>()
+    override val onUserJoin = Event<User>()
+    override val onUserLeave = Event<User>()
+
     private val parser = JSONParser()
 
     val ws = object : WebSocketClient(URI(Config["hackchat", "url"])) {
@@ -24,7 +28,8 @@ open class HackChatFrontend(username: String, pass: String, channel: String) : F
             socket = context.socketFactory.createSocket()
         }
 
-        override fun onOpen(handshake: ServerHandshake?) {
+        override fun onOpen(handshake: ServerHandshake) {
+            println("open")
             val text = mapOf("cmd" to "join", "nick" to "$username#$pass", "channel" to channel).json()
             send(text)
         }
@@ -33,14 +38,21 @@ open class HackChatFrontend(username: String, pass: String, channel: String) : F
             Log.warn("websocket closed; errorcode:$code reason:\"$reason\" isRemote:$remote")
         }
 
+        @Suppress("UNCHECKED_CAST")
         override fun onMessage(message: String) {
-            val messageData = parser.parse(message) as HashMap<*, *>
-            println(messageData)
+            println(message)
+            val data = parser.parse(message) as Map<String, Any>
+            if (data["cmd"] == "chat") {
+                val user = User(data["nick"] as String, data["trip"] as String? ?: "", this@HackChatFrontend)
+                this@HackChatFrontend.onMessage(
+                        win.jaxforreal.botto.frontend.MessageEventData(
+                                user, data["text"] as String, this@HackChatFrontend
+                        )
+                )
+            }
         }
 
-        override fun onError(ex: Exception) {
-            throw ex
-        }
+        override fun onError(ex: Exception) = throw ex
 
     }
 
@@ -53,8 +65,9 @@ open class HackChatFrontend(username: String, pass: String, channel: String) : F
         }
     }
 
-    override fun connect() {
+    override fun connect(): HackChatFrontend {
         ws.connect()
+        return this
     }
 
     override fun disconnect() {

@@ -13,7 +13,9 @@ class Bot {
 
     fun addFrontEnd(f: Frontend) {
         frontends.add(f)
-        f.onMessage += this::onMessage
+        f.onMessage += {
+            onMessage(it)
+        }
     }
 
     private fun onMessage(messageData: MessageEventData) {
