@@ -14,7 +14,7 @@ object Commands {
             Command("broadcast", MODERATOR) {
                 val (frontendName, text) = Command.getFirstWord(argText)
                 if (bot.broadcastTo(frontendName, text)) {
-                    println("broadcasting to $frontendName: `$text`")
+                    replyMessage("broadcasting to $frontendName: `$text`")
                 } else {
                     replyMessage("no frontend '$frontendName' found")
                 }
@@ -46,7 +46,13 @@ object Commands {
                         Config.save()
                         replyMessage("Config saved.")
                     }),
-            //TODO
+
             Command("privilege", ADMIN)
+                    .sub(Command("set", ADMIN) {
+                        val (name, trip, frontend, level) = argText.split(" ")
+                        val levelList = Config.get<MutableList<Map<String, Any>>>("privilege", level.toUpperCase())
+                        levelList.add(mapOf("name" to name, "trip" to trip, "frontend" to frontend))
+                        replyMessage("User $name added to unsaved config as a(n) $level")
+                    })
     )
 }

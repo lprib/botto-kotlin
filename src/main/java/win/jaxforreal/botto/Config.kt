@@ -11,10 +11,6 @@ import java.io.FileWriter
 //get(vararg path: String): Any
 
 object Config {
-    init {
-        println()
-    }
-
     private val userPropFile = File(File(javaClass.protectionDomain.codeSource.location.toURI()), "userConfig.txt")
     private val propsToml = Toml().read(FileReader(javaClass.classLoader.getResource("defaults.txt").file))
 
@@ -27,7 +23,6 @@ object Config {
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getMaybe(vararg keys: String): T? {
-        println("getting ${keys.joinToString(".")}")
         var nextMap = props
 
         for (key in keys.dropLast(1)) {
@@ -78,7 +73,6 @@ object Config {
      */
     fun save() {
         val writer = FileWriter(userPropFile, false)
-        println(userPropFile)
         TomlWriter().write(props, writer)
         writer.close()
     }
