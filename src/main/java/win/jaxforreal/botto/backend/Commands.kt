@@ -7,7 +7,7 @@ object Commands {
     val commands = arrayOf(
 
             Command("source") {
-                messageData.frontend.sendMessage("no source for you, @${messageData.user.name}")
+                messageArgs.frontend.sendMessage("no source for you, @${messageArgs.user.name}")
             },
 
 

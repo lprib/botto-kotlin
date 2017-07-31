@@ -4,7 +4,7 @@ import win.jaxforreal.botto.Event
 
 interface Frontend {
     val name: String
-    val onMessage: Event<MessageEventData>
+    val onMessage: Event<MessageEventArgs>
     val onUserJoin: Event<User>
     val onUserLeave: Event<User>
 

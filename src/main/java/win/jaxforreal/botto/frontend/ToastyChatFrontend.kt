@@ -1,21 +1,19 @@
 package win.jaxforreal.botto.frontend
 
-class ToastyChatFrontend(username: String, pass: String, channel: String) : HackChatFrontend(username, pass, channel) {
-    override val name = "toastychat"
-    //    override val ws = object : WebSocketClient(URI(Config["toastychat.ip"])) {
+import org.java_websocket.client.WebSocketClient
+import org.java_websocket.handshake.ServerHandshake
+import win.jaxforreal.botto.Config
+import win.jaxforreal.botto.Log
+import java.lang.Exception
+import java.net.URI
 //
-//        override fun onOpen(handshake: ServerHandshake) {
-//            send("{\"cmd\":\"join\", \"channel\":\"$channel\", \"nick\":\"$username\", \"password\": \"$pass\"}")
-//        }
+//class ToastyChatFrontend(username: String, pass: String, channel: String) {
+//    override val joinInfoMap get() = mapOf("cmd" to "join", "nick" to username, "pass" to pass, "channel" to channel)
+//    override val joinURI get() = URI(Config["toastychat", "url"])
+//    override val name = "toastychat"
 //
-//        override fun onClose(code: Int, reason: String, remote: Boolean) {
-//        }
-//
-//        override fun onMessage(message: String) {
-//        }
-//
-//        override fun onError(ex: Exception) {
-//        }
-//
+//    override fun doSSLSetup(ws: WebSocketClient) {
+//        //no ssl setup required because of cloudflare protection
+//        println(joinInfoMap.json())
 //    }
-}
+//}

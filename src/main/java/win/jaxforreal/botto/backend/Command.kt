@@ -1,6 +1,6 @@
 package win.jaxforreal.botto.backend
 
-import win.jaxforreal.botto.frontend.MessageEventData
+import win.jaxforreal.botto.frontend.MessageEventArgs
 
 class Command(
         val name: String,
@@ -21,15 +21,15 @@ class Command(
      * @param input the string to test, must start with this command to match
      * @return whether or not this or any subCommands matched
      */
-    fun test(input: String, data: MessageEventData, bot: Bot): Boolean {
+    fun test(input: String, args: MessageEventArgs, bot: Bot): Boolean {
         val (firstWord, restOfString) = getFirstWord(input)
         if (name == firstWord) {
             //test all subCommands, and stop when a single one matches
-            if (!subCommands.any { it.test(restOfString, data, bot) }) {
-                val commandEventArgs = CommandEventArgs(restOfString, data, bot)
+            if (!subCommands.any { it.test(restOfString, args, bot) }) {
+                val commandEventArgs = CommandEventArgs(restOfString, args, bot)
 
                 //if none match, and privilege levels are OK, the parent command is triggered
-                if (data.user.getPrivilegeLevel().isAtOrAbove(privilege)) {
+                if (args.user.getPrivilegeLevel().isAtOrAbove(privilege)) {
                     onSuccess(commandEventArgs)
                 } else {
                     commandEventArgs.replyMessage("You must have privilege level $privilege to do that :)")

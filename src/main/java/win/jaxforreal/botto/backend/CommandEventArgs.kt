@@ -1,7 +1,7 @@
 package win.jaxforreal.botto.backend
 
-import win.jaxforreal.botto.frontend.MessageEventData
+import win.jaxforreal.botto.frontend.MessageEventArgs
 
-data class CommandEventArgs(val argText: String, val messageData: MessageEventData, val bot: Bot) {
-    fun replyMessage(message: String) = messageData.frontend.sendMessage(message)
+data class CommandEventArgs(val argText: String, val messageArgs: MessageEventArgs, val bot: Bot) {
+    fun replyMessage(message: String) = messageArgs.frontend.sendMessage(message)
 }

@@ -1,7 +1,7 @@
 trigger = "."
 
 [toastychat]
-url = "secret-ip-here"
+url = ""
 
 [hackchat]
 url = "wss://hack.chat/chat-ws"

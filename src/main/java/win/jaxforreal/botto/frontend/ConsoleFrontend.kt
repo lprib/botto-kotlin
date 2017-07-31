@@ -15,7 +15,7 @@ class ConsoleFrontend(bot: Bot) : Frontend {
     }
 
     override val name: String = "console"
-    override val onMessage = Event<MessageEventData>()
+    override val onMessage = Event<MessageEventArgs>()
     override val onUserJoin = Event<User>()
     override val onUserLeave = Event<User>()
 
@@ -23,7 +23,7 @@ class ConsoleFrontend(bot: Bot) : Frontend {
         while (true) {
             val message = readLine()
             if (message != null) {
-                onMessage(MessageEventData(
+                onMessage(MessageEventArgs(
                         User(
                                 Config["console", "username"],
                                 Config["console", "trip"], this)
