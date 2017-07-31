@@ -1,6 +1,7 @@
 package win.jaxforreal.botto.backend
 
 import win.jaxforreal.botto.Config
+import win.jaxforreal.botto.Event
 import win.jaxforreal.botto.frontend.Frontend
 import win.jaxforreal.botto.frontend.MessageEventArgs
 import java.io.PrintWriter
@@ -9,6 +10,7 @@ import java.io.StringWriter
 
 class Bot {
     val frontends = arrayListOf<Frontend>()
+    val onFrontendAdd = Event<Frontend>()
 
     fun addFrontEnd(f: Frontend) {
         frontends.add(f)

@@ -1,4 +1,4 @@
-package win.jaxforreal.botto.frontend
+package win.jaxforreal.botto.frontend.implementations
 
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake

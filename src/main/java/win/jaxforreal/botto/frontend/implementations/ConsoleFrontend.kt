@@ -1,8 +1,11 @@
-package win.jaxforreal.botto.frontend
+package win.jaxforreal.botto.frontend.implementations
 
 import win.jaxforreal.botto.Config
 import win.jaxforreal.botto.Event
 import win.jaxforreal.botto.backend.Bot
+import win.jaxforreal.botto.frontend.Frontend
+import win.jaxforreal.botto.frontend.MessageEventArgs
+import win.jaxforreal.botto.frontend.User
 
 //NOTE: frontend must be added last so it can hook into the existing frontends
 class ConsoleFrontend(bot: Bot) : Frontend {

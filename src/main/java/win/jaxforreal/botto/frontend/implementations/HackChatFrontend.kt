@@ -1,4 +1,4 @@
-package win.jaxforreal.botto.frontend
+package win.jaxforreal.botto.frontend.implementations
 
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
@@ -7,6 +7,9 @@ import org.json.simple.parser.JSONParser
 import win.jaxforreal.botto.Config
 import win.jaxforreal.botto.Event
 import win.jaxforreal.botto.Log
+import win.jaxforreal.botto.frontend.Frontend
+import win.jaxforreal.botto.frontend.MessageEventArgs
+import win.jaxforreal.botto.frontend.User
 import java.lang.Exception
 import java.net.URI
 import javax.net.ssl.SSLContext
@@ -68,7 +71,7 @@ open class HackChatFrontend(val username: String, val pass: String, val channel:
             if (data["cmd"] == "chat") {
                 val user = User(data["nick"] as String, data["trip"] as String? ?: "", this@HackChatFrontend)
                 this@HackChatFrontend.onMessage(
-                        win.jaxforreal.botto.frontend.MessageEventArgs(
+                        MessageEventArgs(
                                 user, data["text"] as String, this@HackChatFrontend
                         )
                 )
