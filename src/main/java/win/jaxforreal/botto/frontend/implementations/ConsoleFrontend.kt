@@ -10,17 +10,15 @@ import win.jaxforreal.botto.frontend.User
 //NOTE: frontend must be added last so it can hook into the existing frontends
 class ConsoleFrontend(bot: Bot) : Frontend {
     init {
-        bot.frontends.forEach {
-            it.onMessage += { (user, text) ->
-                println("${user.name}:${user.trip}@${it.name} ${text}")
-            }
-        }
+        bot.frontends.forEach(this::registerFrontend)
+        bot.onFrontendAdd += this::registerFrontend
     }
 
     override val name: String = "console"
     override val onMessage = Event<MessageEventArgs>()
     override val onUserJoin = Event<User>()
     override val onUserLeave = Event<User>()
+    override val onlineUsers = listOf<User>()
 
     private val messageInputThread = Thread {
         while (true) {
@@ -35,12 +33,18 @@ class ConsoleFrontend(bot: Bot) : Frontend {
         }
     }
 
+    private fun registerFrontend(frontend: Frontend) {
+        frontend.onMessage += { (user, text) ->
+            println("${user.name}:${user.trip}@${frontend.name} $text")
+        }
+    }
+
     override fun sendMessage(message: String) {
         println(message)
     }
 
     override fun connect(): ConsoleFrontend {
-        messageInputThread.run()
+        messageInputThread.start()
         return this
     }
 

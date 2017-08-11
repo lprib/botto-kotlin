@@ -14,6 +14,5 @@ class ToastyChatFrontend(username: String, pass: String, channel: String): HackC
 
     override fun doSSLSetup(ws: WebSocketClient) {
         //no ssl setup required because of cloudflare protection
-        println(joinInfoMap.json())
     }
 }

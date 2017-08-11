@@ -2,23 +2,19 @@ package win.jaxforreal.botto
 
 import win.jaxforreal.botto.backend.Bot
 import win.jaxforreal.botto.frontend.implementations.ConsoleFrontend
+import win.jaxforreal.botto.frontend.implementations.HackChatFrontend
 import win.jaxforreal.botto.frontend.implementations.ToastyChatFrontend
 
 //import win.jaxforreal.botto.frontend.ToastyChatFrontend
 
 fun main(args: Array<String>) {
-    println(Config["toastychat", "url"])
+//    val bot = Bot()
+//    bot.addFrontend(ConsoleFrontend(bot).connect())
+
     val bot = Bot()
-    //val hackChatFrontend = HackChatFrontend("botto", "asd", "botDev")
-    val consoleFrontend = ConsoleFrontend(bot)
-    val toastyFrontend = ToastyChatFrontend("qweqwe", "asd", "botDev")
-
-    bot.addFrontEnd(toastyFrontend)
-//    bot.addFrontEnd(hackChatFrontend)
-    bot.addFrontEnd(consoleFrontend)
-
-//    hackChatFrontend.connect()
-    toastyFrontend.connect()
-    consoleFrontend.connect()
+    bot.addFrontend(
+            ConsoleFrontend(bot).connect(),
+            HackChatFrontend("botto", "asd", "botDev").connect()
+    )
     while (true);
 }

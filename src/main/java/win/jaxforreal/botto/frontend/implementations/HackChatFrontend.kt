@@ -20,6 +20,7 @@ open class HackChatFrontend(val username: String, val pass: String, val channel:
     override val onMessage = Event<MessageEventArgs>()
     override val onUserJoin = Event<User>()
     override val onUserLeave = Event<User>()
+    override val onlineUsers = ArrayList<User>()
 
     protected val parser = JSONParser()
 
@@ -66,19 +67,38 @@ open class HackChatFrontend(val username: String, val pass: String, val channel:
 
         @Suppress("UNCHECKED_CAST")
         override fun onMessage(message: String) {
-            println(message)
             val data = parser.parse(message) as Map<String, Any>
             if (data["cmd"] == "chat") {
-                val user = User(data["nick"] as String, data["trip"] as String? ?: "", this@HackChatFrontend)
+                val chattingUser = User(data["nick"] as String, data["trip"] as String? ?: "", this@HackChatFrontend)
                 this@HackChatFrontend.onMessage(
                         MessageEventArgs(
-                                user, data["text"] as String, this@HackChatFrontend
+                                chattingUser, data["text"] as String, this@HackChatFrontend
                         )
                 )
+
+                //if the chatting user has a trip, update it in the onlineUsers list
+                if (chattingUser.trip != "") {
+                    onlineUsers.forEachIndexed { index, (onlineUserName) ->
+                        if (chattingUser.name == onlineUserName) {
+                            onlineUsers[index] = chattingUser
+                        }
+                    }
+                }
+
             } else if (data["cmd"] == "onlineAdd") {
-                onUserJoin(User(data["nick"] as String, "", this@HackChatFrontend))
+                val user = User(data["nick"] as String, "", this@HackChatFrontend)
+                onUserJoin(user)
+                onlineUsers += user
             } else if (data["cmd"] == "onlineRemove") {
-                onUserLeave(User(data["nick"] as String, "", this@HackChatFrontend))
+                val leavingUser = User(data["nick"] as String, "", this@HackChatFrontend)
+                onUserLeave(leavingUser)
+                //remove from onlineUsers, ignoring the tripcode, because it may not be known at this time
+                for ((userName) in onlineUsers) {
+                    if (userName == leavingUser.name) {
+                        onlineUsers -= leavingUser
+                        return
+                    }
+                }
             }
         }
 

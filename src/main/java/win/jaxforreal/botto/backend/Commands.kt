@@ -2,6 +2,7 @@ package win.jaxforreal.botto.backend
 
 import win.jaxforreal.botto.Config
 import win.jaxforreal.botto.backend.Privilege.*
+import win.jaxforreal.botto.backend.commands.Help
 
 object Commands {
     val commands = arrayOf(
@@ -19,10 +20,11 @@ object Commands {
                     replyMessage("no frontend '$frontendName' found")
                 }
             }
-                    .help("")
+                    .help("broadcasts to the specified frontend\n" +
+                            "broadcast \$frontend-name \$text")
 
                     .sub(Command("all", MODERATOR) {
-                        println("broadcasting all")
+                        replyMessage("broadcasting to all: $argText")
                         bot.broadcastAll(argText)
                     })
                     .sub(Command("list", MODERATOR) {
@@ -53,6 +55,7 @@ object Commands {
                         val levelList = Config.get<MutableList<Map<String, Any>>>("privilege", level.toUpperCase())
                         levelList.add(mapOf("name" to name, "trip" to trip, "frontend" to frontend))
                         replyMessage("User $name added to unsaved config as a(n) $level")
-                    })
+                    }),
+            Help()
     )
 }

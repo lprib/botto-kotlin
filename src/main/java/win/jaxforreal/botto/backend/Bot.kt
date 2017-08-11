@@ -12,11 +12,15 @@ class Bot {
     val frontends = arrayListOf<Frontend>()
     val onFrontendAdd = Event<Frontend>()
 
-    fun addFrontEnd(f: Frontend) {
-        frontends.add(f)
-        f.onMessage += {
+    private fun addFrontend(frontend: Frontend) {
+        frontends.add(frontend)
+        frontend.onMessage += {
             onMessage(it)
         }
+    }
+
+    fun addFrontend(vararg newFrontends: Frontend) {
+        newFrontends.forEach { addFrontend(it) }
     }
 
     private fun onMessage(messageArgs: MessageEventArgs) {
