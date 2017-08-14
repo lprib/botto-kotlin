@@ -58,7 +58,6 @@ open class HackChatFrontend(val username: String, val pass: String, val channel:
         override fun onOpen(handshake: ServerHandshake) {
             val text = joinInfoMap.json()
             send(text)
-            println("open $name")
         }
 
         override fun onClose(code: Int, reason: String, remote: Boolean) {

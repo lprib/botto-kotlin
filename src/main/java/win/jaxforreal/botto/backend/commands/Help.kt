@@ -9,8 +9,8 @@ class Help : Command("help", Privilege.USER, "get help with a command", onTrigge
     //toplevel help with no args
     if (argText == "") {
         val trigger = Config["trigger"]
-        replyMessage("${trigger}help \$command-name\n" +
-                Commands.commands.map { Config["trigger"] + it.name }.joinToString()
+        replyMessage("@${messageArgs.user.name} ${trigger}help \$command-name\n" +
+                Commands.commands.map { Config["trigger"] + it.name + " (${it.privilege.name})"}.joinToString()
         )
     } else {
         //if a specific command was selected

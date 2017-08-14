@@ -56,6 +56,13 @@ object Commands {
                         levelList.add(mapOf("name" to name, "trip" to trip, "frontend" to frontend))
                         replyMessage("User $name added to unsaved config as a(n) $level")
                     }),
+            Command("test") {
+                replyMessage("argText=$argText\n" +
+                        "fullText=${messageArgs.text}" +
+                        "user=${messageArgs.user.name} ${messageArgs.user.trip}\n" +
+                        "frontend=${messageArgs.frontend}")
+            },
+
             Help()
     )
 }

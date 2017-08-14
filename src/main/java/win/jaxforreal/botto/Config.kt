@@ -6,10 +6,6 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-//TODO arbitrarily nested gets and sets
-//ie set(vararg path: String, value: Any)
-//get(vararg path: String): Any
-
 object Config {
     private val userPropFile = File(File(javaClass.protectionDomain.codeSource.location.toURI()), "userConfig.txt")
     private val propsToml = Toml().read(FileReader(javaClass.classLoader.getResource("defaults.txt").file))
