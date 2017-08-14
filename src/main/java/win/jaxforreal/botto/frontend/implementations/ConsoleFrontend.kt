@@ -15,6 +15,7 @@ class ConsoleFrontend(bot: Bot) : Frontend {
     }
 
     override val name: String = "console"
+    override val infoString = "console"
     override val onMessage = Event<MessageEventArgs>()
     override val onUserJoin = Event<User>()
     override val onUserLeave = Event<User>()

@@ -10,6 +10,15 @@ url = "wss://hack.chat/chat-ws"
 username = "console"
 trip = "consoletrip"
 
+[[frontend]]
+type = "console"
+
+[[frontend]]
+type = "hackchat"
+username = "botto"
+password = "henlo"
+channel = "botDev"
+
 [privilege]
     [[privilege.ADMIN]]
         name = "liam"

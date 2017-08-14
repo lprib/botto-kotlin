@@ -11,7 +11,7 @@ object Config {
     private val propsToml = Toml().read(FileReader(javaClass.classLoader.getResource("defaults.txt").file))
 
     //load user config file into props if it exists
-    val props = if (userPropFile.isFile) {
+    val props: MutableMap<String, Any> = if (userPropFile.isFile) {
         propsToml.read(FileReader(userPropFile)).toMap()
     } else {
         propsToml.toMap()

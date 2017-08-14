@@ -12,6 +12,12 @@ class Bot {
     val frontends = arrayListOf<Frontend>()
     val onFrontendAdd = Event<Frontend>()
 
+    init {
+        //load default frontends
+        val defaultFrontendProps = Config.get<List<Map<String, String>>>("frontend")
+        defaultFrontendProps.forEach {addFrontend(FrontendFactory.fromProperties(it, this)!!.connect())}
+    }
+
     private fun addFrontend(frontend: Frontend) {
         frontends.add(frontend)
         frontend.onMessage += {

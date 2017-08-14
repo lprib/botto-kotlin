@@ -5,6 +5,8 @@ import win.jaxforreal.botto.Event
 
 interface Frontend {
     val name: String
+    //this string must be different for different frontends, identifies multiple instances to the user
+    val infoString: String
     val onMessage: Event<MessageEventArgs>
     val onUserJoin: Event<User>
     val onUserLeave: Event<User>

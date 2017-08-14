@@ -12,9 +12,5 @@ fun main(args: Array<String>) {
 //    bot.addFrontend(ConsoleFrontend(bot).connect())
 
     val bot = Bot()
-    bot.addFrontend(
-            ConsoleFrontend(bot).connect(),
-            HackChatFrontend("botto", "asd", "botDev").connect()
-    )
     while (true);
 }

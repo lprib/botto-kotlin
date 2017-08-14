@@ -16,6 +16,7 @@ import javax.net.ssl.SSLContext
 
 open class HackChatFrontend(val username: String, val pass: String, val channel: String) : Frontend {
     override val name = "hackchat"
+    override val infoString = "username=$username channel=$channel"
 
     override val onMessage = Event<MessageEventArgs>()
     override val onUserJoin = Event<User>()

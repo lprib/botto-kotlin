@@ -2,7 +2,9 @@ package win.jaxforreal.botto.backend
 
 import win.jaxforreal.botto.Config
 import win.jaxforreal.botto.backend.Privilege.*
+import win.jaxforreal.botto.backend.commands.FrontendManager
 import win.jaxforreal.botto.backend.commands.Help
+import kotlin.system.exitProcess
 
 object Commands {
     val commands = arrayOf(
@@ -10,28 +12,6 @@ object Commands {
             Command("source") {
                 messageArgs.frontend.sendMessage("no source for you, @${messageArgs.user.name}")
             },
-
-
-            Command("broadcast", MODERATOR) {
-                val (frontendName, text) = Command.getFirstWord(argText)
-                if (bot.broadcastTo(frontendName, text)) {
-                    replyMessage("broadcasting to $frontendName: `$text`")
-                } else {
-                    replyMessage("no frontend '$frontendName' found")
-                }
-            }
-                    .help("broadcasts to the specified frontend\n" +
-                            "broadcast \$frontend-name \$text")
-
-                    .sub(Command("all", MODERATOR) {
-                        replyMessage("broadcasting to all: $argText")
-                        bot.broadcastAll(argText)
-                    })
-                    .sub(Command("list", MODERATOR) {
-                        val list = bot.frontends.map { it.name }.joinToString()
-                        replyMessage("Available frontends: $list.")
-                    }),
-
 
             Command("config", ADMIN)
                     .sub(Command("set", ADMIN) {
@@ -58,11 +38,17 @@ object Commands {
                     }),
             Command("test") {
                 replyMessage("argText=$argText\n" +
-                        "fullText=${messageArgs.text}" +
+                        "fullText=${messageArgs.text}\n" +
                         "user=${messageArgs.user.name} ${messageArgs.user.trip}\n" +
-                        "frontend=${messageArgs.frontend}")
+                        "frontend=${messageArgs.frontend}\n" +
+                        "frontendInfoString=(${messageArgs.frontend.infoString})")
             },
 
-            Help()
+            Command("stop", ADMIN) {
+                System.exit(0)
+            },
+
+            Help(),
+            FrontendManager()
     )
 }
