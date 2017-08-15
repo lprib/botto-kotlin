@@ -2,6 +2,7 @@ package win.jaxforreal.botto.backend
 
 import win.jaxforreal.botto.Config
 import win.jaxforreal.botto.Event
+import win.jaxforreal.botto.Log
 import win.jaxforreal.botto.frontend.Frontend
 import win.jaxforreal.botto.frontend.MessageEventArgs
 import java.io.PrintWriter
@@ -13,9 +14,7 @@ class Bot {
     val onFrontendAdd = Event<Frontend>()
 
     init {
-        //load default frontends
-        val defaultFrontendProps = Config.get<List<Map<String, String>>>("frontend")
-        defaultFrontendProps.forEach {addFrontend(FrontendFactory.fromProperties(it, this)!!.connect())}
+        startDefaultFrontends()
     }
 
     private fun addFrontend(frontend: Frontend) {
@@ -23,6 +22,8 @@ class Bot {
         frontend.onMessage += {
             onMessage(it)
         }
+
+        Log.t("adding frontend:${frontend.name} info:(${frontend.infoString})")
     }
 
     fun addFrontend(vararg newFrontends: Frontend) {
@@ -40,6 +41,8 @@ class Bot {
                     val sw = StringWriter()
                     ex.printStackTrace(PrintWriter(sw))
                     messageArgs.frontend.sendMessage(sw.toString())
+
+                    ex.printStackTrace()
                 }
             }
         }
@@ -57,5 +60,10 @@ class Bot {
         matchingFrontends.forEach { it.sendMessage(message) }
 
         return matchingFrontends.isNotEmpty()
+    }
+
+    private fun startDefaultFrontends() {
+        val defaultFrontendProps = Config.get<List<Map<String, String>>>("frontend")
+        defaultFrontendProps.forEach { addFrontend(FrontendFactory.fromProperties(it, this)!!.connect()) }
     }
 }

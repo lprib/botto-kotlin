@@ -61,6 +61,8 @@ object Config {
         }
 
         nextMap[keys.last()] = value
+
+        Log.t("set config ${keys.joinToString(".")} = $value")
     }
 
     /**
@@ -71,5 +73,7 @@ object Config {
         val writer = FileWriter(userPropFile, false)
         TomlWriter().write(props, writer)
         writer.close()
+
+        Log.t("saved config")
     }
 }

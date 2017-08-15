@@ -40,6 +40,7 @@ open class HackChatFrontend(val username: String, val pass: String, val channel:
     }
 
     override fun connect(): HackChatFrontend {
+        Log.t("connecting hc...")
         ws = getWebSocket()
         doSSLSetup(ws)
         ws.connect()
@@ -59,6 +60,8 @@ open class HackChatFrontend(val username: String, val pass: String, val channel:
         override fun onOpen(handshake: ServerHandshake) {
             val text = joinInfoMap.json()
             send(text)
+
+            Log.t("websocket opened")
         }
 
         override fun onClose(code: Int, reason: String, remote: Boolean) {
@@ -99,6 +102,8 @@ open class HackChatFrontend(val username: String, val pass: String, val channel:
                         return
                     }
                 }
+            } else {
+                Log.warn("unrecognised JSON: $message")
             }
         }
 

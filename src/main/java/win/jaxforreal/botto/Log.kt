@@ -3,6 +3,11 @@ package win.jaxforreal.botto
 import java.time.OffsetDateTime
 
 object Log {
+
+    fun t(text: String) {
+        println(getMessage("trace", text))
+    }
+
     fun info(text: String) {
         println(getMessage("info", text))
     }
@@ -16,6 +21,6 @@ object Log {
     }
 
     private fun getMessage(level: String, text: String):String {
-        return "[$level] ${OffsetDateTime.now()} | $text"
+        return "[${level.padStart(5)}] ${OffsetDateTime.now()} | $text"
     }
 }

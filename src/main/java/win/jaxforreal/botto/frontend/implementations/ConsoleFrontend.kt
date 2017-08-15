@@ -2,6 +2,7 @@ package win.jaxforreal.botto.frontend.implementations
 
 import win.jaxforreal.botto.Config
 import win.jaxforreal.botto.Event
+import win.jaxforreal.botto.Log
 import win.jaxforreal.botto.backend.Bot
 import win.jaxforreal.botto.frontend.Frontend
 import win.jaxforreal.botto.frontend.MessageEventArgs
@@ -22,6 +23,7 @@ class ConsoleFrontend(bot: Bot) : Frontend {
     override val onlineUsers = listOf<User>()
 
     private val messageInputThread = Thread {
+        Log.t("starting console input thread")
         while (true) {
             val message = readLine()
             if (message != null) {

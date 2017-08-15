@@ -1,4 +1,5 @@
 trigger = "."
+replyprefix = "henlo $user"
 
 [toastychat]
 url = ""
@@ -21,8 +22,8 @@ channel = "botDev"
 
 [privilege]
     [[privilege.ADMIN]]
-        name = "liam"
-        trip = "qwerty"
+        name = "jax"
+        trip = "xh7Atl"
         frontend = "hackchat"
 
     [[privilege.ADMIN]]
@@ -31,6 +32,9 @@ channel = "botDev"
         frontend = "console"
 
     [[privilege.MODERATOR]]
-        name = "mod"
-        trip = "123"
-        frontend = "toastychat"
+        name = "dummy"
+        trip = "this trip cannot exist"
+        frontend = "console"
+
+[commands]
+source = "no source for you, {{user}}"
