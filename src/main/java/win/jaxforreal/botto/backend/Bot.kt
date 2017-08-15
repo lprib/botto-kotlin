@@ -38,9 +38,7 @@ class Bot {
             } catch (ex: Throwable) {
                 //NoSuchElementException is normal when a command is not recognised
                 if (ex !is NoSuchElementException) {
-                    val sw = StringWriter()
-                    ex.printStackTrace(PrintWriter(sw))
-                    messageArgs.frontend.sendMessage(sw.toString())
+                    messageArgs.frontend.sendMessage("oops, $ex")
 
                     ex.printStackTrace()
                 }

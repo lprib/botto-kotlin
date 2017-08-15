@@ -5,35 +5,39 @@ import win.jaxforreal.botto.backend.Command
 import win.jaxforreal.botto.backend.Commands
 import win.jaxforreal.botto.backend.Privilege
 
-class Help : Command("help", Privilege.USER, "get help with a command", onTrigger = {
+class Help : Command("help", Privilege.USER, onTrigger = {
     //toplevel help with no args
     if (argText == "") {
         val trigger = Config["trigger"]
-        replyMessage("@${messageArgs.user.name} ${trigger}help \$command-name\n" +
-                Commands.commands.map { Config["trigger"] + it.name + " (${it.privilege.name})"}.joinToString()
+        replyMessage("@${messageArgs.user.name} ${trigger}help \$command-name [\$subcommand-name]\n" +
+                Commands.commands.map { Config["trigger"] + it.name + " (${it.privilege.name})" }.joinToString()
         )
     } else {
         //if a specific command was selected
-        val (commandName, _) = getFirstWord(argText)
+        val commandNames = argText.split(" ")
         try {
-            val command = Commands.commands.first { it.name == commandName }
-            replyMessage(command.helpText + "\n" + getSubCommandHierarchy(command))
+            var command = Commands.commands.first { it.name == commandNames[0] }
+            for (nestedCommandName in commandNames.drop(1)) {
+                command = command.subCommands.first{it.name == nestedCommandName}
+            }
+
+            replyMessage("${command.helpText}\nhierarchy: ${getSubCommandHierarchy(command)}")
         } catch (e: NoSuchElementException) {
-            replyMessage("not command found with the name $commandName")
+            replyMessage("not command found with the name $argText")
         }
     }
 }) {
 
     init {
-
+        help("help \$command-name [\$subcommand-name]")
     }
 
+    //TODO test
     companion object {
         private fun getSubCommandHierarchy(command: Command): String {
-            return command.name +
-                    if (command.subCommands.size > 0)
-                        "(" + command.subCommands.map { getSubCommandHierarchy(it) }.joinToString() + ")"
-                    else ""
+            return if (command.subCommands.size > 0)
+                        command.name + " -> (" + command.subCommands.map { getSubCommandHierarchy(it) }.joinToString() + ")"
+                    else command.name + "(no hierarchy)"
         }
     }
 }

@@ -16,13 +16,14 @@ class FrontendManager : Command("frontend", Privilege.ADMIN, onTrigger = {
 }) {
 
     init {
-        help("broadcasts to the specified frontend\n" +
-                "frontend \$frontend-name \$text")
+        help("frontend \$frontend-name \$text\n" +
+                "broadcasts to the specified frontend")
 
         sub(Command("all", Privilege.ADMIN) {
             replyMessage("broadcasting to all: $argText")
             bot.broadcastAll(argText)
-        })
+        }.help("frontend all \$text\n" +
+                "broadcasts to all frontends"))
 
         sub(Command("list", Privilege.MODERATOR) {
             val list = bot.frontends.map { "${it.name}(${it.infoString})" }.joinToString()
@@ -38,6 +39,9 @@ class FrontendManager : Command("frontend", Privilege.ADMIN, onTrigger = {
             } else {
                 replyMessage("could not add frontend")
             }
-        })
+        }.help("frontend start \$start-info\n" +
+                "start info is parsed by java properties API, commas are replaced by \\n\n" +
+                "eg. frontend start type=hackchat, channel=programming, username=IAmABot, password=hunter2\n" +
+                "see botto.backend.FrontendFactory.kt for start info parsing code"))
     }
 }

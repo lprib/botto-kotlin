@@ -1,4 +1,4 @@
-trigger = "."
+trigger = ";"
 replyprefix = "henlo $user"
 
 [toastychat]
@@ -19,6 +19,12 @@ type = "hackchat"
 username = "botto"
 password = "henlo"
 channel = "botDev"
+
+#[[frontend]]
+#type = "hackchat"
+#username = "botto"
+#password = "henlo"
+#channel = "programming"
 
 [privilege]
     [[privilege.ADMIN]]
